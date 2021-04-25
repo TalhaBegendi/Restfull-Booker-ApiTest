@@ -1,12 +1,12 @@
 package apiClasses;
 
-import booking_getSet.Booking;
-import org.openqa.selenium.WebDriver;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import com.google.gson.Gson;
+import BaseClass.BaseClass;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
+import org.json.JSONObject;
+import org.openqa.selenium.WebDriver;
+
+import java.io.IOException;
 
 
 public class post_CreateBooking_200 extends post_CreateToken_200 {
@@ -18,18 +18,16 @@ public class post_CreateBooking_200 extends post_CreateToken_200 {
     {
         super(driver);
     }
-    public  void post_CreateBooking_200_Test() {
+    public  void post_CreateBooking_200_Test(String jsonFile) throws IOException {
 
         RestAssured.baseURI = "https://restful-booker.herokuapp.com/";
 
-        Booking createBookingGetSet = getCreateBookingGetSet();
-        Gson gson = new Gson();
-        String body = gson.toJson(createBookingGetSet);
+        JSONObject jsonObject = BaseClass.readJsonFile(jsonFile);
 
         response = RestAssured.given()
 
                 .contentType("application/json")
-                .body(body)
+                .body(jsonObject.toString())
                 .when()
                 .post("booking")
                 .then()
@@ -42,18 +40,4 @@ public class post_CreateBooking_200 extends post_CreateToken_200 {
     {
         System.out.println(response.asString());
     }
-
-    private static Booking getCreateBookingGetSet() {
-        try {
-            Gson gson = new Gson();
-            FileReader reader;
-            reader = new FileReader("src/test/talha/createBooking.json");
-            Booking createBookingGetSet = gson.fromJson(reader, Booking.class);
-            return createBookingGetSet;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     }

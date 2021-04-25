@@ -5,6 +5,8 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import org.openqa.selenium.WebDriver;
 
+import java.io.IOException;
+
 public class delete_DeleteBooking_200 extends post_CreateBooking_200 {
 
     public delete_DeleteBooking_200(WebDriver driver) {
@@ -12,12 +14,13 @@ public class delete_DeleteBooking_200 extends post_CreateBooking_200 {
         super(driver);
     }
 
-    public void delete_DeleteBooking_200_Test(){
+    public void delete_DeleteBooking_200_Test() throws IOException {
 
-        post_CreateToken_200_Test();
-        post_CreateBooking_200_Test();
+        post_CreateToken_200_Test("createToken");
+        post_CreateBooking_200_Test("createBooking");
 
         RestAssured.baseURI="https://restful-booker.herokuapp.com/";
+
 
         Response response_UpdateBooking = RestAssured.given()
                 .contentType("application/json")
@@ -30,7 +33,7 @@ public class delete_DeleteBooking_200 extends post_CreateBooking_200 {
                 .statusCode(201)
                 .extract().response();
 
-        System.out.println(response_UpdateBooking.getBody().asString());
+        System.out.println(response_UpdateBooking.getBody().asString()+" Kayıt Silindi");
 
     }
 }
